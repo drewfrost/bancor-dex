@@ -3,18 +3,31 @@ pragma solidity 0.6.12;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-/**
- *Submitted for verification at Etherscan.io on 2020-10-05
- */
+interface IContractRegistry {
+    function addressOf(bytes32 contractName) external returns (address);
+}
 
-// File: solidity/contracts/token/interfaces/IERC20Token.sol
+interface IBancorNetwork {
+    function convertByPath(
+        address[] memory _path,
+        uint256 _amount,
+        uint256 _minReturn,
+        address _beneficiary,
+        address _affiliateAccount,
+        uint256 _affiliateFee
+    ) external payable returns (uint256);
 
-// SPDX-License-Identifier: SEE LICENSE IN LICENSE
-pragma solidity 0.6.12;
+    function rateByPath(address[] memory _path, uint256 _amount)
+        external
+        view
+        returns (uint256);
 
-/*
-    ERC20 Standard Token interface
-*/
+    function conversionPath(IERC20Token _sourceToken, IERC20Token _targetToken)
+        external
+        view
+        returns (address[] memory);
+}
+
 interface IERC20Token {
     function name() external view returns (string memory);
 
@@ -37,30 +50,4 @@ interface IERC20Token {
     ) external returns (bool);
 
     function approve(address _spender, uint256 _value) external returns (bool);
-}
-
-
-contract IContractRegistry {
-    function addressOf(bytes32 contractName) external returns (address);
-}
-
-contract IBancorNetwork {
-    function convertByPath(
-        address[] memory _path,
-        uint256 _amount,
-        uint256 _minReturn,
-        address _beneficiary,
-        address _affiliateAccount,
-        uint256 _affiliateFee
-    ) external payable returns (uint256);
-
-    function rateByPath(address[] memory _path, uint256 _amount)
-        external
-        view
-        returns (uint256);
-
-    function conversionPath(IERC20Token _sourceToken, IERC20Token _targetToken)
-        external
-        view
-        returns (address[]);
 }
